@@ -39,6 +39,7 @@ See [INSTALLATION.md](INSTALLATION.md) for detailed setup instructions.
 
 MIT
 
+
 ## Support
 
 This is a community node. For issues, please check the documentation or create an issue on GitHub.
