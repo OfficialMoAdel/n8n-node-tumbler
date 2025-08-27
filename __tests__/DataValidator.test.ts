@@ -119,8 +119,8 @@ describe('DataValidator', () => {
             const schema: ValidationSchema = {
                 email: {
                     type: 'string',
-                    customValidator: (value: string) => {
-                        if (!value.includes('@')) return 'Email must contain @ symbol';
+                    customValidator: (value: unknown) => {
+                        if (typeof value !== 'string' || !value.includes('@')) return 'Email must contain @ symbol';
                         return true;
                     },
                 },
