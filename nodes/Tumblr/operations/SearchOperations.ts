@@ -650,7 +650,7 @@ export class SearchOperations {
             }
 
             // Provide helpful error messages and alternative suggestions
-            let errorMessage = `Failed to search user content: ${error.message}`;
+            const errorMessage = `Failed to search user content: ${error.message}`;
             let suggestions = 'Try adjusting your search parameters or check your credentials.';
 
             // Provide specific suggestions based on error type
@@ -781,7 +781,7 @@ export class SearchOperations {
     /**
      * Calculate peak activity period within the timeframe
      */
-    private static calculatePeakActivity(posts: any[], timeThreshold: number): { hour: number; count: number } {
+    private static calculatePeakActivity(posts: any[], _timeThreshold: number): { hour: number; count: number } {
         const hourCounts: { [key: number]: number } = {};
 
         posts.forEach((post: any) => {

@@ -1,4 +1,4 @@
-import { ICredentialsDecrypted, IHttpRequestOptions, NodeApiError } from 'n8n-workflow';
+import { ICredentialsDecrypted, NodeApiError } from 'n8n-workflow';
 import * as tumblr from 'tumblr.js';
 
 export interface TumblrCredentials {

@@ -22,7 +22,7 @@ export interface ValidationError {
     field: string;
     type: ValidationErrorType;
     message: string;
-    value?: any;
+    value?: unknown;
     expectedType?: string;
     constraints?: IDataObject;
 }
@@ -38,9 +38,9 @@ export interface ValidationRule {
     min?: number;
     max?: number;
     pattern?: RegExp;
-    allowedValues?: any[];
-    customValidator?: (value: any) => boolean | string;
-    sanitizer?: (value: any) => any;
+    allowedValues?: unknown[];
+    customValidator?: (value: unknown) => boolean | string;
+    sanitizer?: (value: unknown) => unknown;
 }
 
 /**
@@ -55,7 +55,7 @@ export interface ValidationSchema {
  * Provides input validation, sanitization, and security measures
  */
 export class DataValidator {
-    private static readonly URL_PATTERN = /^https?:\/\/(?:[-\w.])+(?:\:[0-9]+)?(?:\/(?:[\w\/_.])*(?:\?(?:[\w&=%.])*)?(?:\#(?:[\w.])*)?)?$/;
+    private static readonly URL_PATTERN = /^https?:\/\/(?:[-\w.])+(?::[0-9]+)?(?:\/(?:[\w/_.])*(?:\?(?:[\w&=%.])*)?(?:#(?:[\w.])*)?)?$/;
     private static readonly EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     private static readonly SCRIPT_PATTERN = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
     private static readonly DANGEROUS_PROTOCOLS = ['javascript:', 'data:', 'vbscript:', 'file:', 'ftp:'];
@@ -109,9 +109,9 @@ export class DataValidator {
         for (const [fieldName, value] of Object.entries(data)) {
             const rule = schema[fieldName];
             if (rule && rule.sanitizer) {
-                sanitizedData[fieldName] = rule.sanitizer(value);
+                sanitizedData[fieldName] = rule.sanitizer(value) as any;
             } else {
-                sanitizedData[fieldName] = this.sanitizeValue(value);
+                sanitizedData[fieldName] = this.sanitizeValue(value) as any;
             }
         }
 
@@ -121,7 +121,7 @@ export class DataValidator {
     /**
      * Validates a single field against its rule
      */
-    private static validateField(fieldName: string, value: any, rule: ValidationRule): ValidationError[] {
+    private static validateField(fieldName: string, value: unknown, rule: ValidationRule): ValidationError[] {
         const errors: ValidationError[] = [];
 
         // Type validation
@@ -169,7 +169,7 @@ export class DataValidator {
     /**
      * Validates the type of a value
      */
-    private static validateType(fieldName: string, value: any, expectedType: string): ValidationError | null {
+    private static validateType(fieldName: string, value: unknown, expectedType: string): ValidationError | null {
         let isValid = false;
         let actualType: string = typeof value;
 
@@ -369,7 +369,7 @@ export class DataValidator {
         if (typeof value === 'object' && value !== null) {
             const sanitized: IDataObject = {};
             for (const [key, val] of Object.entries(value)) {
-                sanitized[key] = this.sanitizeValue(val);
+                sanitized[key] = this.sanitizeValue(val) as any;
             }
             return sanitized;
         }
@@ -680,7 +680,7 @@ export class DataValidator {
     /**
      * Basic MIME type detection from file headers
      */
-    private static detectMimeType(data: any): string | null {
+    private static detectMimeType(data: unknown): string | null {
         let buffer: Buffer;
 
         if (Buffer.isBuffer(data)) {
@@ -1087,8 +1087,8 @@ export class DataValidator {
 
         try {
             // Try to encode and decode to validate
-            const buffer = Buffer.from(content, encoding as BufferEncoding);
-            const decoded = buffer.toString(encoding as BufferEncoding);
+            const buffer = Buffer.from(content, encoding as any);
+            const decoded = buffer.toString(encoding as any);
             return decoded === content;
         } catch {
             return false;
@@ -1101,7 +1101,7 @@ export class DataValidator {
     public static securityValidation(input: any): any {
         if (typeof input === 'string') {
             // Remove null bytes and control characters
-            let sanitized = input.replace(/\0/g, '').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+            let sanitized = input.replace(/\u0000/g, '').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '');
 
             // Normalize Unicode
             sanitized = sanitized.normalize('NFC');
@@ -1134,7 +1134,7 @@ export class DataValidator {
         if (typeof input === 'object' && input !== null) {
             const sanitized: IDataObject = {};
             for (const [key, value] of Object.entries(input)) {
-                sanitized[key] = this.securityValidation(value);
+                sanitized[key] = this.securityValidation(value) as any;
             }
             return sanitized;
         }

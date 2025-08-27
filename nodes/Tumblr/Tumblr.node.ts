@@ -7,7 +7,7 @@ import {
     NodeConnectionType,
 } from 'n8n-workflow';
 
-import { TumblrAuthenticator, TumblrClient } from './TumblrAuthenticator';
+import { TumblrAuthenticator } from './TumblrAuthenticator';
 import { OperationRouter } from './OperationRouter';
 
 export class Tumblr implements INodeType {

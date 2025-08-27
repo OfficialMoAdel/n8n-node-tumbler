@@ -35,8 +35,8 @@ jobs:
       
     - name: Run linting
       run: |
-        # Try main ESLint config first, fallback to simple config
-        npm run lint || (echo "Main ESLint config failed, trying simple config..." && npx eslint --config .eslintrc.simple.js nodes credentials package.json)
+        # Try main ESLint config first, fallback to CI config, then simple config
+        npm run lint || (echo "Main ESLint config failed, trying CI config..." && npx eslint --config .eslintrc.ci.js nodes credentials package.json) || (echo "CI ESLint config failed, trying simple config..." && npx eslint --config .eslintrc.simple.js nodes credentials package.json)
       
     - name: Run tests
       run: npm test -- --coverage --watchAll=false
