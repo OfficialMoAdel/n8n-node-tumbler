@@ -242,9 +242,17 @@ describe('System Validation Tests', () => {
         });
 
         it('should have specification documents', () => {
-            expect(fs.existsSync(path.join('.kiro', 'specs', 'tumblr-integration', 'requirements.md'))).toBe(true);
-            expect(fs.existsSync(path.join('.kiro', 'specs', 'tumblr-integration', 'design.md'))).toBe(true);
-            expect(fs.existsSync(path.join('.kiro', 'specs', 'tumblr-integration', 'tasks.md'))).toBe(true);
+            const projectRoot = process.cwd();
+            const specDir = path.join(projectRoot, '.kiro', 'specs', 'tumblr-integration');
+            const requirementsPath = path.join(specDir, 'requirements.md');
+            const designPath = path.join(specDir, 'design.md');
+            const tasksPath = path.join(specDir, 'tasks.md');
+
+
+
+            expect(fs.existsSync(requirementsPath)).toBe(true);
+            expect(fs.existsSync(designPath)).toBe(true);
+            expect(fs.existsSync(tasksPath)).toBe(true);
         });
     });
 
