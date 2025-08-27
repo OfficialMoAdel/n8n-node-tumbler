@@ -242,13 +242,12 @@ describe('System Validation Tests', () => {
         });
 
         it('should have specification documents', () => {
-            const projectRoot = process.cwd();
+            // Use __dirname to get the test file directory, then go up to project root
+            const projectRoot = path.resolve(__dirname, '..');
             const specDir = path.join(projectRoot, '.kiro', 'specs', 'tumblr-integration');
             const requirementsPath = path.join(specDir, 'requirements.md');
             const designPath = path.join(specDir, 'design.md');
             const tasksPath = path.join(specDir, 'tasks.md');
-
-
 
             expect(fs.existsSync(requirementsPath)).toBe(true);
             expect(fs.existsSync(designPath)).toBe(true);

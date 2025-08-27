@@ -781,7 +781,7 @@ export class Tumblr implements INodeType {
                         case 'getTrending':
                             parameters.options = this.getNodeParameter('trendingOptions', i, {});
                             break;
-                        case 'advancedSearch':
+                        case 'advancedSearch': {
                             const advancedOptions = this.getNodeParameter('advancedOptions', i, {}) as any;
                             // Convert tags string to array if provided
                             if (advancedOptions.tags && typeof advancedOptions.tags === 'string') {
@@ -789,6 +789,7 @@ export class Tumblr implements INodeType {
                             }
                             parameters = advancedOptions;
                             break;
+                        }
                     }
                 } else {
                     // Handle other resource parameters
