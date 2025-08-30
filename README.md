@@ -2,6 +2,8 @@
 
 A community node for n8n that provides integration with Tumblr's API.
 
+[![CI/CD Pipeline](https://github.com/OfficialMoAdel/n8n-node-tumbler/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/OfficialMoAdel/n8n-node-tumbler/actions/workflows/ci.yml)
+
 ## Features
 
 - Blog operations (get info, get posts)
