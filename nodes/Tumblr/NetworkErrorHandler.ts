@@ -365,7 +365,7 @@ export class NetworkErrorHandler {
         }
 
         const recentErrors = errors.slice(-10); // Last 10 errors
-        const errorCodes = recentErrors.map(e => e.details?.errorCode).filter(Boolean);
+        // const errorCodes = recentErrors.map(e => e.details?.errorCode).filter(Boolean);
         const timeoutErrors = recentErrors.filter(e => e.message.includes('timeout')).length;
         const connectionErrors = recentErrors.filter(e =>
             e.details?.errorCode === 'ECONNREFUSED' ||

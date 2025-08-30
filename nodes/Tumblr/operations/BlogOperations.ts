@@ -94,17 +94,17 @@ export class BlogOperations {
     async getBlogFollowers(
         client: TumblrClient,
         blogName: string,
-        options: IDataObject = {}
+        _options: IDataObject = {}
     ): Promise<IDataObject> {
         try {
             const cleanBlogName = this.cleanBlogName(blogName);
 
             // Note: Blog followers endpoint may not be available for all blogs
             // This is a placeholder implementation
-            const followerOptions = {
-                limit: Math.min(Number(options.limit) || 20, 20), // API limit
-                offset: Number(options.offset) || 0,
-            };
+            // const followerOptions = {
+            //     limit: Math.min(Number(options.limit) || 20, 20), // API limit
+            //     offset: Number(options.offset) || 0,
+            // };
 
             // Since tumblr.js might not have a direct followers method,
             // we'll need to make a custom API call or return blog info with follower count

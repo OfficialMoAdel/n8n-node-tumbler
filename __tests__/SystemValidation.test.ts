@@ -242,9 +242,38 @@ describe('System Validation Tests', () => {
         });
 
         it('should have specification documents', () => {
-            expect(fs.existsSync('.kiro/specs/tumblr-integration/requirements.md')).toBe(true);
-            expect(fs.existsSync('.kiro/specs/tumblr-integration/design.md')).toBe(true);
-            expect(fs.existsSync('.kiro/specs/tumblr-integration/tasks.md')).toBe(true);
+            // Try multiple approaches to find the project root
+            let projectRoot = path.resolve(__dirname, '..');
+
+            // If .kiro doesn't exist, try current working directory
+            if (!fs.existsSync(path.join(projectRoot, '.kiro'))) {
+                projectRoot = process.cwd();
+            }
+
+            // If still not found, try going up one more level
+            if (!fs.existsSync(path.join(projectRoot, '.kiro'))) {
+                projectRoot = path.resolve(__dirname, '..', '..');
+            }
+
+            const specDir = path.join(projectRoot, '.kiro', 'specs', 'tumblr-integration');
+            const requirementsPath = path.join(specDir, 'requirements.md');
+            const designPath = path.join(specDir, 'design.md');
+            const tasksPath = path.join(specDir, 'tasks.md');
+
+            // Add some debugging info if files don't exist
+            if (!fs.existsSync(requirementsPath)) {
+                console.log('Project root:', projectRoot);
+                console.log('Spec dir:', specDir);
+                console.log('Requirements path:', requirementsPath);
+                console.log('Directory exists:', fs.existsSync(specDir));
+                if (fs.existsSync(specDir)) {
+                    console.log('Files in spec dir:', fs.readdirSync(specDir));
+                }
+            }
+
+            expect(fs.existsSync(requirementsPath)).toBe(true);
+            expect(fs.existsSync(designPath)).toBe(true);
+            expect(fs.existsSync(tasksPath)).toBe(true);
         });
     });
 

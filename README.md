@@ -15,6 +15,15 @@ A community node for n8n that provides integration with Tumblr's API.
 - OAuth2 authentication
 - Rate limiting and error handling
 
+## Security Notes
+
+⚠️ **Known Dependencies Issues**: This package currently has some security vulnerabilities in transitive dependencies:
+
+- **Critical: form-data vulnerability (GHSA-fjxv-7rqg-78g4)**: Comes from n8n-workflow peer dependency. This affects boundary generation in multipart forms but will be resolved when the host n8n installation updates to a newer version of n8n-workflow.
+- **Development dependencies**: Several vulnerabilities in the gulp/chokidar dependency chain (braces, micromatch, etc.) used only for development builds. These do not affect runtime security.
+
+**Impact Assessment**: These vulnerabilities do not affect the runtime security of the node when used in production n8n installations, as the vulnerable dependencies are either development-only or will be updated by the host n8n system.
+
 ## Installation
 
 See [INSTALLATION.md](INSTALLATION.md) for detailed setup instructions.

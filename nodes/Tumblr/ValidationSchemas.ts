@@ -13,8 +13,8 @@ export class ValidationSchemas {
         type: 'string' as const,
         minLength: 1,
         maxLength: 32,
-        customValidator: (value: string) => {
-            if (typeof value !== 'string') return 'Blog name must be a string';
+        customValidator: (value: unknown) => {
+            if (typeof value !== 'string') { return 'Blog name must be a string'; }
             const cleaned = value.replace(/\.tumblr\.com$/, '');
             if (!/^[a-zA-Z0-9_-]+$/.test(cleaned)) {
                 return 'Blog name can only contain letters, numbers, hyphens, and underscores';
@@ -29,12 +29,12 @@ export class ValidationSchemas {
     private static readonly TAGS_RULE = {
         type: 'array' as const,
         maxLength: 30,
-        customValidator: (value: any) => {
-            if (value === undefined || value === null) return true;
-            if (!Array.isArray(value)) return 'Tags must be an array';
+        customValidator: (value: unknown) => {
+            if (value === undefined || value === null) { return true; }
+            if (!Array.isArray(value)) { return 'Tags must be an array'; }
             for (const tag of value) {
-                if (typeof tag !== 'string') return 'All tags must be strings';
-                if (tag.length > 139) return 'Each tag must be 139 characters or less';
+                if (typeof tag !== 'string') { return 'All tags must be strings'; }
+                if (tag.length > 139) { return 'Each tag must be 139 characters or less'; }
             }
             return true;
         },
@@ -64,12 +64,12 @@ export class ValidationSchemas {
         title: {
             type: 'string',
             maxLength: 250,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         body: {
             type: 'string',
             maxLength: 4096,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         tags: ValidationSchemas.TAGS_RULE,
         state: ValidationSchemas.STATE_RULE,
@@ -92,21 +92,21 @@ export class ValidationSchemas {
         caption: {
             type: 'string',
             maxLength: 4096,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         photos: {
             required: true,
             type: 'array',
             minLength: 1,
             maxLength: 10,
-            customValidator: (value: any) => {
-                if (!Array.isArray(value)) return 'Photos must be an array';
+            customValidator: (value: unknown) => {
+                if (!Array.isArray(value)) { return 'Photos must be an array'; }
                 for (const photo of value) {
-                    if (typeof photo !== 'object' || !photo) return 'Each photo must be an object';
-                    if (!photo.url && !photo.data) return 'Each photo must have either url or data';
-                    if (photo.url && typeof photo.url !== 'string') return 'Photo URL must be a string';
-                    if (photo.caption && typeof photo.caption !== 'string') return 'Photo caption must be a string';
-                    if (photo.altText && typeof photo.altText !== 'string') return 'Photo alt text must be a string';
+                    if (typeof photo !== 'object' || !photo) { return 'Each photo must be an object'; }
+                    if (!photo.url && !photo.data) { return 'Each photo must have either url or data'; }
+                    if (photo.url && typeof photo.url !== 'string') { return 'Photo URL must be a string'; }
+                    if (photo.caption && typeof photo.caption !== 'string') { return 'Photo caption must be a string'; }
+                    if (photo.altText && typeof photo.altText !== 'string') { return 'Photo alt text must be a string'; }
                 }
                 return true;
             },
@@ -134,12 +134,12 @@ export class ValidationSchemas {
             type: 'string',
             minLength: 1,
             maxLength: 4096,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         source: {
             type: 'string',
             maxLength: 500,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         tags: ValidationSchemas.TAGS_RULE,
         state: ValidationSchemas.STATE_RULE,
@@ -162,8 +162,8 @@ export class ValidationSchemas {
         url: {
             required: true,
             type: 'url',
-            customValidator: (value: string) => {
-                if (typeof value !== 'string') return 'URL must be a string';
+            customValidator: (value: unknown) => {
+                if (typeof value !== 'string') { return 'URL must be a string'; }
                 try {
                     const url = new URL(value);
                     if (!['http:', 'https:'].includes(url.protocol)) {
@@ -178,12 +178,12 @@ export class ValidationSchemas {
         title: {
             type: 'string',
             maxLength: 250,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         description: {
             type: 'string',
             maxLength: 4096,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         tags: ValidationSchemas.TAGS_RULE,
         state: ValidationSchemas.STATE_RULE,
@@ -206,18 +206,18 @@ export class ValidationSchemas {
         title: {
             type: 'string',
             maxLength: 250,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         conversation: {
             required: true,
             type: 'array',
             minLength: 1,
-            customValidator: (value: any) => {
-                if (!Array.isArray(value)) return 'Conversation must be an array';
+            customValidator: (value: unknown) => {
+                if (!Array.isArray(value)) { return 'Conversation must be an array'; }
                 for (const item of value) {
-                    if (typeof item !== 'object' || !item) return 'Each conversation item must be an object';
-                    if (!item.name || typeof item.name !== 'string') return 'Each conversation item must have a name';
-                    if (!item.phrase || typeof item.phrase !== 'string') return 'Each conversation item must have a phrase';
+                    if (typeof item !== 'object' || !item) { return 'Each conversation item must be an object'; }
+                    if (!item.name || typeof item.name !== 'string') { return 'Each conversation item must have a name'; }
+                    if (!item.phrase || typeof item.phrase !== 'string') { return 'Each conversation item must have a phrase'; }
                 }
                 return true;
             },
@@ -243,13 +243,13 @@ export class ValidationSchemas {
         caption: {
             type: 'string',
             maxLength: 4096,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         videoUrl: {
             type: 'url',
-            customValidator: (value: string) => {
-                if (!value) return true; // Optional field
-                if (typeof value !== 'string') return 'Video URL must be a string';
+            customValidator: (value: unknown) => {
+                if (!value) { return true; } // Optional field
+                if (typeof value !== 'string') { return 'Video URL must be a string'; }
                 try {
                     const url = new URL(value);
                     if (!['http:', 'https:'].includes(url.protocol)) {
@@ -262,8 +262,8 @@ export class ValidationSchemas {
             },
         },
         videoData: {
-            customValidator: (value: any) => {
-                if (!value) return true; // Optional if videoUrl is provided
+            customValidator: (value: unknown) => {
+                if (!value) { return true; } // Optional if videoUrl is provided
                 if (!Buffer.isBuffer(value) && typeof value !== 'string') {
                     return 'Video data must be a Buffer or base64 string';
                 }
@@ -291,13 +291,13 @@ export class ValidationSchemas {
         caption: {
             type: 'string',
             maxLength: 4096,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         audioUrl: {
             type: 'url',
-            customValidator: (value: string) => {
-                if (!value) return true; // Optional field
-                if (typeof value !== 'string') return 'Audio URL must be a string';
+            customValidator: (value: unknown) => {
+                if (!value) { return true; } // Optional field
+                if (typeof value !== 'string') { return 'Audio URL must be a string'; }
                 try {
                     const url = new URL(value);
                     if (!['http:', 'https:'].includes(url.protocol)) {
@@ -310,8 +310,8 @@ export class ValidationSchemas {
             },
         },
         audioData: {
-            customValidator: (value: any) => {
-                if (!value) return true; // Optional if audioUrl is provided
+            customValidator: (value: unknown) => {
+                if (!value) { return true; } // Optional if audioUrl is provided
                 if (!Buffer.isBuffer(value) && typeof value !== 'string') {
                     return 'Audio data must be a Buffer or base64 string';
                 }
@@ -321,17 +321,17 @@ export class ValidationSchemas {
         trackName: {
             type: 'string',
             maxLength: 200,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         artist: {
             type: 'string',
             maxLength: 200,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         album: {
             type: 'string',
             maxLength: 200,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         tags: ValidationSchemas.TAGS_RULE,
         state: ValidationSchemas.STATE_RULE,
@@ -360,17 +360,17 @@ export class ValidationSchemas {
         title: {
             type: 'string',
             maxLength: 250,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         body: {
             type: 'string',
             maxLength: 4096,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         caption: {
             type: 'string',
             maxLength: 4096,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         tags: ValidationSchemas.TAGS_RULE,
         state: ValidationSchemas.STATE_RULE,
@@ -538,7 +538,7 @@ export class ValidationSchemas {
         comment: {
             type: 'string',
             maxLength: 4096,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         tags: ValidationSchemas.TAGS_RULE,
     };
@@ -559,7 +559,7 @@ export class ValidationSchemas {
             type: 'string',
             minLength: 1,
             maxLength: 139,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         before: {
             type: 'number',
@@ -585,7 +585,7 @@ export class ValidationSchemas {
             type: 'string',
             minLength: 1,
             maxLength: 500,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         sort: {
             type: 'string',
@@ -612,7 +612,7 @@ export class ValidationSchemas {
             type: 'string',
             minLength: 1,
             maxLength: 500,
-            sanitizer: (value: string) => value?.trim() || '',
+            sanitizer: (value: unknown) => (typeof value === 'string' ? value?.trim() || '' : ''),
         },
         type: {
             type: 'string',
@@ -638,8 +638,8 @@ export class ValidationSchemas {
             type: 'string',
             minLength: 1,
             maxLength: 255,
-            customValidator: (value: string) => {
-                if (typeof value !== 'string') return 'File name must be a string';
+            customValidator: (value: unknown) => {
+                if (typeof value !== 'string') { return 'File name must be a string'; }
                 // Check for dangerous file extensions
                 const dangerousExtensions = ['.exe', '.bat', '.cmd', '.com', '.pif', '.scr', '.vbs', '.js'];
                 const extension = value.toLowerCase().substring(value.lastIndexOf('.'));
@@ -651,7 +651,7 @@ export class ValidationSchemas {
         },
         fileData: {
             required: true,
-            customValidator: (value: any) => {
+            customValidator: (value: unknown) => {
                 if (!Buffer.isBuffer(value) && typeof value !== 'string') {
                     return 'File data must be a Buffer or base64 string';
                 }
@@ -666,14 +666,14 @@ export class ValidationSchemas {
         },
         mimeType: {
             type: 'string',
-            customValidator: (value: string) => {
-                if (!value) return true; // Optional field
+            customValidator: (value: unknown) => {
+                if (!value) { return true; } // Optional field
                 const allowedTypes = [
                     'image/jpeg', 'image/png', 'image/gif', 'image/webp',
                     'video/mp4', 'video/webm', 'video/ogg',
                     'audio/mp3', 'audio/wav', 'audio/ogg', 'audio/m4a'
                 ];
-                if (!allowedTypes.includes(value)) {
+                if (typeof value === 'string' && !allowedTypes.includes(value)) {
                     return `MIME type '${value}' is not allowed`;
                 }
                 return true;

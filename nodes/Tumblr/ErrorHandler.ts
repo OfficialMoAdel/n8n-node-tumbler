@@ -144,7 +144,7 @@ export class ErrorHandler {
                     originalError,
                 };
 
-            case 429:
+            case 429: {
                 const retryAfter = this.extractRetryAfter(originalError.response?.headers);
                 return {
                     type: TumblrErrorType.RATE_LIMIT,
@@ -156,6 +156,7 @@ export class ErrorHandler {
                     retryAfter,
                     originalError,
                 };
+            }
 
             case 500:
             case 502:
@@ -325,11 +326,11 @@ export class ErrorHandler {
         return 'Bad request - Invalid parameters or request format';
     }
 
-    private getUnauthorizedMessage(responseData: any): string {
+    private getUnauthorizedMessage(_responseData: any): string {
         return 'Unauthorized - Invalid API credentials or expired token';
     }
 
-    private getForbiddenMessage(responseData: any): string {
+    private getForbiddenMessage(_responseData: any): string {
         return 'Forbidden - Insufficient permissions for this operation';
     }
 
@@ -351,7 +352,7 @@ export class ErrorHandler {
         return `${baseMessage}. Please wait before making more requests`;
     }
 
-    private getServerErrorMessage(status: number, responseData: any): string {
+    private getServerErrorMessage(status: number, _responseData: any): string {
         switch (status) {
             case 500:
                 return 'Internal server error - Tumblr API is experiencing issues';

@@ -68,7 +68,7 @@ export class OperationRouter {
             case 'getInfo':
                 return await client.blogInfo(cleanBlogName);
 
-            case 'getPosts':
+            case 'getPosts': {
                 const postOptions = {
                     limit: parameters.limit || 20,
                     offset: parameters.offset || 0,
@@ -78,6 +78,7 @@ export class OperationRouter {
                     filter: parameters.filter || 'text',
                 };
                 return await client.blogPosts(cleanBlogName, postOptions);
+            }
 
             default:
                 throw new NodeOperationError(
@@ -128,7 +129,7 @@ export class OperationRouter {
                 }
                 return await client.deletePost(cleanBlogName, parameters.postId as string);
 
-            case 'get':
+            case 'get': {
                 if (!parameters.postId) {
                     throw new NodeOperationError(
                         { message: 'Missing post ID' } as any,
@@ -141,6 +142,7 @@ export class OperationRouter {
                     notes_info: parameters.notesInfo || false,
                 };
                 return await client.blogPosts(cleanBlogName, postOptions);
+            }
 
             default:
                 throw new NodeOperationError(
@@ -164,7 +166,7 @@ export class OperationRouter {
             case 'getInfo':
                 return await client.userInfo();
 
-            case 'getDashboard':
+            case 'getDashboard': {
                 const dashboardOptions = {
                     limit: parameters.limit || 20,
                     offset: parameters.offset || 0,
@@ -174,8 +176,9 @@ export class OperationRouter {
                     notes_info: parameters.notesInfo || false,
                 };
                 return await client.userDashboard(dashboardOptions);
+            }
 
-            case 'getLikes':
+            case 'getLikes': {
                 const likesOptions = {
                     limit: parameters.limit || 20,
                     offset: parameters.offset || 0,
@@ -183,6 +186,7 @@ export class OperationRouter {
                     after: parameters.after || undefined,
                 };
                 return await client.userLikes(likesOptions);
+            }
 
             default:
                 throw new NodeOperationError(
@@ -212,21 +216,23 @@ export class OperationRouter {
         const cleanBlogName = this.cleanBlogName(blogName);
 
         switch (operation) {
-            case 'add':
+            case 'add': {
                 // Add post to queue - this is essentially creating a post with state: 'queue'
                 const queueParams = {
                     ...parameters,
                     state: 'queue',
                 };
                 return await this.createPost(cleanBlogName, queueParams, client);
+            }
 
-            case 'get':
+            case 'get': {
                 const queueOptions = {
                     limit: parameters.limit || 20,
                     offset: parameters.offset || 0,
                     filter: parameters.filter || 'text',
                 };
                 return await client.blogQueue(cleanBlogName, queueOptions);
+            }
 
             case 'remove':
                 if (!parameters.postId) {
@@ -266,21 +272,23 @@ export class OperationRouter {
         const cleanBlogName = this.cleanBlogName(blogName);
 
         switch (operation) {
-            case 'create':
+            case 'create': {
                 // Create draft - this is essentially creating a post with state: 'draft'
                 const draftParams = {
                     ...parameters,
                     state: 'draft',
                 };
                 return await this.createPost(cleanBlogName, draftParams, client);
+            }
 
-            case 'get':
+            case 'get': {
                 const draftOptions = {
                     limit: parameters.limit || 20,
                     offset: parameters.offset || 0,
                     filter: parameters.filter || 'text',
                 };
                 return await client.blogDrafts(cleanBlogName, draftOptions);
+            }
 
             case 'update':
                 if (!parameters.postId) {
@@ -300,7 +308,7 @@ export class OperationRouter {
                 }
                 return await client.deletePost(cleanBlogName, parameters.postId as string);
 
-            case 'publish':
+            case 'publish': {
                 if (!parameters.postId) {
                     throw new NodeOperationError(
                         { message: 'Missing post ID' } as any,
@@ -313,6 +321,7 @@ export class OperationRouter {
                     state: 'published',
                 };
                 return await client.editPost(cleanBlogName, parameters.postId as string, publishParams);
+            }
 
             default:
                 throw new NodeOperationError(
